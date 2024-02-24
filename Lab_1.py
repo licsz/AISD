@@ -5,7 +5,6 @@
 #Вариант 27.
 #Шеснадцатиричные нечетные числа, не превышающие 409610 и содержащие более К цифр.
 #Вывести числа и их количество. Минимальное число вывести прописью.
-
 def convert_hex_to_dec(number):
     digits = '0123456789abcdef'
     result = 0
@@ -14,7 +13,6 @@ def convert_hex_to_dec(number):
         result += position * digits.find(i)
         position *= 16
     return result
-
 def check_number(number):
     digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
     for i in number:
@@ -64,8 +62,11 @@ while main_check:
 
     del mas_dict
 
-    for i in mas_dict_result:
-        print(i + " : " + str(mas_dict_result.get(i)))
+    if not mas_dict_result:
+        print('Подходящие элементы не были найдены')
+    else:
+        for i in mas_dict_result:
+            print(i + " : " + str(mas_dict_result.get(i)))
 
     for i in mas_dict_result.keys():
         if result_dict.get(i) is not None:
