@@ -38,7 +38,7 @@ while main_check:
     mas = []
     while counter > 0:
         a = file.read(1)
-        if a == " ":
+        if a == " " or a == "/n":
             if checkword:
                 mas.append(word)
                 word = ""
