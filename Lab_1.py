@@ -81,13 +81,15 @@ while main_check:
     else:
         main_check = True
 
+if not result_dict:
+    ("Подходящие элементы не были найдены")
+else:
+    dec_mas = {}
+    for i in result_dict.keys():
+        dec_mas[convert_hex_to_dec(i)] = i
+    print("число : кол-во")
+    min = dec_mas.get(min(dec_mas.keys()))
+    for i in result_dict:
+        print(i+" : " + str(result_dict.get(i)))
 
-dec_mas = {}
-for i in result_dict.keys():
-    dec_mas[convert_hex_to_dec(i)] = i
-print("число : кол-во")
-min = dec_mas.get(min(dec_mas.keys()))
-for i in result_dict:
-    print(i+" : " + str(result_dict.get(i)))
-
-print('минимальное число = ' + min)
+    print('минимальное число = ' + min)
