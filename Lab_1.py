@@ -18,7 +18,7 @@ def convert_hex_to_dec(number):
 def check_number(number):
     digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
     for i in number:
-        if i in digits:
+        if i.lower() in digits:
             continue
         else:
             return False
@@ -31,19 +31,21 @@ main_check = True
 main_input = 0
 print("число : кол-во")
 counter_leksem = 10
+checkword = False
 while main_check:
     counter = counter_leksem
-    checkword = False
     word = ""
     mas = []
     while counter > 0:
         a = file.read(1)
-        if a == " " or a == "/n":
+        if a == "\n":
+            a = " "
+        if a == " ":
             if checkword:
                 mas.append(word)
-                word = ""
                 counter = counter - 1
             checkword = False
+            word = ""
         else:
             word = word + a
             checkword = True
@@ -71,7 +73,6 @@ while main_check:
         else:
             result_dict[i] = mas_dict_result.get(i)
 
-
     while True:
         main_input = str(input("Прочитать еще " + str(counter_leksem) + " лексем из файла?\n1. Да\n2. Нет. Подвести итог.\nОтвет: "))
         if main_input == "1" or main_input == "2":
@@ -82,7 +83,7 @@ while main_check:
         main_check = True
 
 if not result_dict:
-    ("Подходящие элементы не были найдены")
+    print("Подходящие элементы не были найдены")
 else:
     dec_mas = {}
     for i in result_dict.keys():
@@ -91,5 +92,4 @@ else:
     min = dec_mas.get(min(dec_mas.keys()))
     for i in result_dict:
         print(i+" : " + str(result_dict.get(i)))
-
     print('минимальное число = ' + min)
