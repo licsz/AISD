@@ -109,13 +109,6 @@ def multiply_k_matric(k, matrix1):
         result.append(row)
     return result
 
-mat_a = []
-mat_b = []
-mat_c = []
-mat_e = []
-mat_d = []
-mat_f = []
-
 k = int(input("введите число к = "))
 n = int(input("введите число n = "))
 mat_b = input_mat(n)
