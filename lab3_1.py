@@ -78,6 +78,7 @@ def print_mat(mat, description):
     for i in mat:
         print(i)
     print("\n")
+
 def multiply_matrices(matrix1, matrix2):
     result = []
     rows = len(matrix1)
@@ -160,7 +161,10 @@ def conect_mat(mat, mat1, mat2, mat3, mat4):
     return result
 
 k = int(input("введите число к = "))
-n = int(input("введите число n = "))
+
+n = int(input("введите число n больше 5 = "))
+if n < 6:
+    n = int(input("введите число n больше 5 = "))
 
 '''
 mat_b = input_mat(n)
@@ -180,6 +184,8 @@ print_mat(mat_a, "Матрица a")
 mat_f = [[mat_b, mat_c], [mat_d, mat_e]]
 '''
 
+
+
 #mat_a = rand_filling_mat(n)
 mat_a = input_mat(n)
 mat_a_copy = separation_mat(mat_a)
@@ -192,6 +198,7 @@ print_mat(mat_d, "Матрица D")
 mat_e = mat_a_copy[3]
 print_mat(mat_e, "Матрица E")
 mat_f = [[mat_b, mat_c], [mat_d, mat_e]]
+
 
 if sum(perimetr_left(mat_e)) > perimetr_down(mat_e).count(0):
     mat_f[0][1] = replace_elements(mat_c)
