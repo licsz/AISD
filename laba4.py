@@ -5,7 +5,9 @@
 # матричные операции последовательно.
 import numpy as np
 from matplotlib import pyplot as plt
-n = int(input("Введите размер массива "))
+n = 0
+while (n<6):
+    n = int(input("Введите размер массива "))
 k = int(input("Введите коэф. k "))
 A = np.random.randint(-10, 11, size=(n, n))  # создание массива
 F = A.copy()
