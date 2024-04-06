@@ -43,7 +43,7 @@ def F_iterative(n):
         if i == 1:
             temp.append(1)
         elif i == 2:
-            factorial *= fac_it(((i - 1) * 2) + 1, i * 2)
+            factorial = 24
             temp.append(2)
         elif i > 2:
             factorial *= fac_it(((i - 1) * 2) + 1, i * 2)
