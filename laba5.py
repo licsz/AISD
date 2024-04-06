@@ -1,7 +1,8 @@
-#27 F(1) = 1; F(2) = 2; F(n) = (-1)n*(F(n-1)- F(n-2) /(2n)!) при n > 2.
+#27 F(1) = 1; F(2) = 2; F(n) = (-1)^n*(F(n-1)- F(n-2) /(2n)!) при n > 2.
 import time
 import matplotlib.pyplot as plt
 from functools import lru_cache
+import decimal
 """факториал итерационно"""
 def fac_it(m,n):
     factorial = 1
@@ -9,6 +10,7 @@ def fac_it(m,n):
         factorial *= i
     return factorial
 """факториал рекурсивно"""
+@lru_cache(maxsize=None)
 def fac_rec(n):
     if n == 1:
         return 1
@@ -22,14 +24,16 @@ def print_mat(mat,discription):
     plt.show()
 
 """Рекурсионный подход"""
-@lru_cache(maxsize=32)
-def F_recursive(n, factorial):
+@lru_cache(maxsize=None)
+def F_recursive(n):
     if n == 1:
         return 1
     elif n == 2:
         return 2
     else:
-        return ((-1) ** n) * (F_recursive(n-1, factorial/n-1) - (F_recursive(n-2, factorial/((n-1)*(n-2))) / factorial))
+        result = -1 if n % 2 == 1 else 1
+        z = float(decimal.Decimal(F_recursive(n-2))/fac_rec(2*n))
+        return result * (F_recursive(n-1) - z)
 """Итерационный подход"""
 def F_iterative(n):
     temp = []
@@ -38,11 +42,12 @@ def F_iterative(n):
         if i == 1:
             temp.append(1)
         elif i == 2:
-            factorial *= fac_it(((i - 1) * 2 )+ 1, i * 2)
+            factorial *= fac_it(((i - 1) * 2) + 1, i * 2)
             temp.append(2)
         elif i > 2:
-            factorial *= fac_it(((i - 1) * 2 )+ 1, i * 2)
-            temp.append(((-1) ** i) * (temp[-1] - (temp[-2] / factorial)))
+            factorial *= fac_it(((i - 1) * 2) + 1, i * 2)
+            z = float(decimal.Decimal(temp[-2])/factorial)
+            temp.append(((-1) ** i) * (temp[-1] - z))
     return temp[-1]
 
 """Координаты для графика Рекурсионного подхода"""
@@ -62,7 +67,7 @@ while max(execution_time_recursive, execution_time_iterative) < time_reaction:
     iteration += 1
     """начало замера"""
     start_time = time.perf_counter()
-    result = F_recursive(iteration, fac_rec(2*iteration))
+    result = F_recursive(iteration)
     end_time = time.perf_counter()
     F_recursive.cache_clear()
     """конец замера"""
