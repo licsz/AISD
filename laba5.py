@@ -1,78 +1,103 @@
 #27 F(1) = 1; F(2) = 2; F(n) = (-1)n*(F(n-1)- F(n-2) /(2n)!) при n > 2.
-import math
 import time
 import matplotlib.pyplot as plt
+from functools import lru_cache
+"""факториал итерационно"""
+def fac_it(m,n):
+    factorial = 1
+    for i in range(m, n + 1):
+        factorial *= i
+    return factorial
+"""факториал рекурсивно"""
+def fac_rec(n):
+    if n == 1:
+        return 1
+    return fac_rec(n - 1) * n
 
-def print_mat(mat,discription): #Вывод матрицы c Наименованием
+"""Вывод матрицы c Наименованием """
+def print_mat(mat,discription):
     plt.matshow(mat)
     plt.title(discription)
     plt.colorbar()
     plt.show()
-def F_recursive(n):
+
+"""Рекурсионный подход"""
+@lru_cache(maxsize=32)
+def F_recursive(n, factorial):
     if n == 1:
         return 1
     elif n == 2:
         return 2
     else:
-        return (-1) ** (n * (F_recursive(n-1) - F_recursive(n-2)) / math.factorial(2*n))
-
+        return ((-1) ** n) * (F_recursive(n-1, factorial/n-1) - (F_recursive(n-2, factorial/((n-1)*(n-2))) / factorial))
+"""Итерационный подход"""
 def F_iterative(n):
-    temp_1 = 0
-    temp_2 = 0
+    temp = []
+    factorial = 2
     for i in range(1, n+1):
         if i == 1:
-            temp_1 = 1
+            temp.append(1)
         elif i == 2:
-            temp_2 = 2
-        elif i % 2 == 1 and i != 1:
-            temp_1 = (-1) ** (n * (temp_2 - temp_1) / math.factorial(2*i))
-        elif i % 2 == 0 and i != 2:
-            temp_2 = (-1) ** (n * (temp_1 - temp_2) / (math.factorial(2*i)))
-    if n % 2 == 1:
-        return temp_1
-    else:
-        return temp_2
+            factorial *= fac_it(((i - 1) * 2 )+ 1, i * 2)
+            temp.append(2)
+        elif i > 2:
+            factorial *= fac_it(((i - 1) * 2 )+ 1, i * 2)
+            temp.append(((-1) ** i) * (temp[-1] - (temp[-2] / factorial)))
+    return temp[-1]
 
+"""Координаты для графика Рекурсионного подхода"""
 data1 = []
+"""Координаты для графика Итерационного подхода"""
 data2 = []
+"""Время рекурсивного продхода"""
 execution_time_recursive = 0
+"""Время итерационного продхода"""
 execution_time_iterative = 0
 time_reaction = float(input("Введите макс время реакции "))
+"""Количество итераций(Глубина)"""
 iteration = 0
-count_sim = 0
+"""цикл тестирования времени выполнения, пока вермя одного из подходов не стало больше макс время реакции"""
 while max(execution_time_recursive, execution_time_iterative) < time_reaction:
+    """Рекурсионный подход"""
     iteration += 1
-    start_time = time.time()
-    result = F_recursive(iteration)
-    end_time = time.time()
+    """начало замера"""
+    start_time = time.perf_counter()
+    result = F_recursive(iteration, fac_rec(2*iteration))
+    end_time = time.perf_counter()
+    F_recursive.cache_clear()
+    """конец замера"""
     execution_time_recursive = end_time - start_time
     data1.append((iteration, execution_time_recursive))
     print("Тест рекурсия ", "Результат выполнения: ", result, " Время выполения: ", execution_time_recursive)
 
-    start_time = time.time()
+    """Итерационный подход"""
+    """начало замера"""
+    start_time = time.perf_counter()
     result = F_iterative(iteration)
-    end_time = time.time()
+    end_time = time.perf_counter()
+    """конец замера"""
     execution_time_iterative = end_time - start_time
     data2.append((iteration, execution_time_iterative))
     print("Тест итерационно ", "Результат выполнения: ", result, " Время выполения: ", execution_time_iterative)
-    if execution_time_recursive == execution_time_iterative:
-        count_sim += 1
+    """итерации с одинаковым временем выполнения"""
+
+"""Преобразование для вывода инф. теста в график и таблицу"""
 x1, y1 = zip(*data1)
 x2, y2 = zip(*data2)
+#y1 = [x * 1000 for x in y1]
+#y2 = [x * 1000 for x in y2]
 print_mat([x1,y1], "Тест рекурсия")
 print_mat([x2,y2], "Тест итерационно")
 
-# построение графика
+"""построение графика"""
 plt.plot(x1, y1, label='Тест рекурсия')
 plt.plot(x2, y2, label='Тест итерационно')
 
-# добавление легенды
+"""добавление легенды"""
 plt.legend()
-# добавление заголовка и меток осей
+"""добавление заголовка и меток осей"""
 plt.title('График зависимости')
 plt.xlabel('Ось X, кол-во итераций')
 plt.ylabel('Ось Y, Время выполения')
-# вывод графика на экран
+"""вывод графика на экран"""
 plt.show()
-
-print("Количество итераций с одинаковым результатом по времени: ", count_sim)
