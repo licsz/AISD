@@ -38,6 +38,7 @@ def F_recursive(n):
 def F_iterative(n):
     temp = []
     factorial = 2
+    r = -1
     for i in range(1, n+1):
         if i == 1:
             temp.append(1)
@@ -46,8 +47,9 @@ def F_iterative(n):
             temp.append(2)
         elif i > 2:
             factorial *= fac_it(((i - 1) * 2) + 1, i * 2)
+            r *=(-1)
             z = float(decimal.Decimal(temp[-2])/factorial)
-            temp.append(((-1) ** i) * (temp[-1] - z))
+            temp.append(r * (temp[-1] - z))
     return temp[-1]
 
 """Координаты для графика Рекурсионного подхода"""
