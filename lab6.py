@@ -1,3 +1,6 @@
+#Вариант 27. У юноши P пиджаков, B брюк, R рубашек, G галстуков. Составьте все возможные костюмы из этих предметов.
+
+
 import time
 from itertools import product
 class Outfit:
